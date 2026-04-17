@@ -19,19 +19,19 @@ all:
                 leaf4:
                   ansible_host: 192.168.8.154
             
-            vtep3:
-              hosts:
-                leaf5:
-                  ansible_host: 192.168.8.155
-                leaf6:
-                  ansible_host: 192.168.8.156
+            # vtep3:
+            #   hosts:
+            #     leaf5:
+            #       ansible_host: 192.168.8.155
+            #     leaf6:
+            #       ansible_host: 192.168.8.156
 
-            vtep4:
-              hosts:
-                leaf7:
-                  ansible_host: 192.168.8.157
-                leaf8:
-                  ansible_host: 192.168.8.158
+            # vtep4:
+            #   hosts:
+            #     leaf7:
+            #       ansible_host: 192.168.8.157
+            #     leaf8:
+            #       ansible_host: 192.168.8.158
           vars:
             ansible_network_os: eos
         
