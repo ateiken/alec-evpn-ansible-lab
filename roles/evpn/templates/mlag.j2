@@ -24,7 +24,7 @@ interface port-channel 999
    switchport trunk group mlag-peer
    exit
 !
-no spanning-tree vlan 4090
+no spanning-tree vlan-id 4090
 !
 mlag configuration
    domain-id leafs
@@ -41,5 +41,5 @@ vlan 4091
    name mlag-ibgp
    trunk group mlag-peer
 
-no spanning-tree vlan 4091
+no spanning-tree vlan-id 4091
 
