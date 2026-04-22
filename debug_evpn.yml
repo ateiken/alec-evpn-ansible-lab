@@ -11,4 +11,4 @@
 
     - name: "Display EVPN Summary"
       debug:
-        var: evpn_summary.stdout[0]
+        var: evpn_summary.results[0].stdout[0]
