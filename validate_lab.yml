@@ -93,7 +93,7 @@
 
   - name: Get EVPN peer list
     set_fact:
-      bgp_peers: "{{ output.stdout[0].peers }}"
+      bgp_peers: "{{ output.stdout[0].vrfs.default.peers }}"
     tags:
       - evpn
 
