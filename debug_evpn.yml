@@ -1,0 +1,14 @@
+---
+- hosts: spines
+  connection : local
+  gather_facts: no
+
+  tasks:
+    - name: "Gather EVPN Summary"
+      eos_command:
+        commands: 'show evpn summary | json'
+      register: evpn_summary
+
+    - name: "Display EVPN Summary"
+      debug:
+        var: evpn_summary.stdout[0]
