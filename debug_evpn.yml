@@ -6,7 +6,7 @@
   tasks:
     - name: "Gather EVPN Summary"
       eos_command:
-        commands: 'show evpn summary | json'
+        commands: 'show bgp evpn summary | json'
       register: evpn_summary
 
     - name: "Display EVPN Summary"
