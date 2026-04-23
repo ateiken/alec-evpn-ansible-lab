@@ -3,6 +3,10 @@
 vlan {{ vlan_id }}
    name {{ vlan_name }}
 
+interface vlan {{ vlan_id }}
+   vrf {{ vrf_name }}
+   ip address virtual {{ gw_ip }}/{{ mask }}
+
 interface Vxlan1
    vxlan vlan {{ vlan_id }} vni {{ vlan_vni }}
 
