@@ -1,0 +1,6 @@
+---
+- name: Configure base configuration
+  eos_config:
+    src: base_config.j2
+  tags:
+    - base_config

@@ -1,2 +1,3 @@
 ---
-# tasks file for base_config
+# tasks file for base config
+- import_tasks: base_config.yml

@@ -1,0 +1,16 @@
+ip domain lookup source-interface Management1
+
+ip name-server vrf mgmt 1.1.1.1
+ip name-server vrf mgmt 8.8.8.8
+
+banner motd
+************************************
+* Authorized Access Only - {{ device_name }}
+************************************
+EOF
+
+ip routing vrf mgmt
+
+ip route vrf mgmt 0.0.0.0/0 192.168.8.2
+
+ntp server vrf mgmt pool.ntp.org
