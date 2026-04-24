@@ -2,7 +2,7 @@
 - name: Configure banner
   arista.eos.eos_banner:
     banner: motd
-    text:
+    text: |
       -------------------------------------
     
       Authorized Access Only - {{ inventory_hostname }}
