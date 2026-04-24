@@ -1,0 +1,11 @@
+---
+- name: Configure banner
+  arista.eos.eos_banner:
+    banner: motd
+    text:
+      -------------------------------------
+      Authorized Access Only - {{ device_name }}
+      -------------------------------------
+    state: present
+  tags:
+    - base_config

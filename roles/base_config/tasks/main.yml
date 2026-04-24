@@ -1,3 +1,4 @@
 ---
 # tasks file for base config
 - import_tasks: base_config.yml
+- import_tasks: banner.yml
