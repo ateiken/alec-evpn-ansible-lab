@@ -4,7 +4,9 @@
     banner: motd
     text:
       -------------------------------------
-      Authorized Access Only - {{ device_name }}
+    
+      Authorized Access Only - {{ inventory_hostname }}
+
       -------------------------------------
     state: present
   tags:
