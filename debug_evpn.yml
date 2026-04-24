@@ -1,12 +1,12 @@
 ---
 - hosts: spines
-  connection : local
+  connection: local
   gather_facts: no
 
   tasks:
     - name: "Gather EVPN Summary"
       eos_command:
-        commands: 'show bgp evpn summary | json'
+        commands: "show bgp evpn summary | json"
       register: evpn_summary
 
     - name: "Display EVPN Summary"
