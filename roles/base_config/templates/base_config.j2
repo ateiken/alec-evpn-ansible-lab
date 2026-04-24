@@ -8,4 +8,6 @@ ip routing vrf mgmt
 
 ip route vrf mgmt 0.0.0.0/0 192.168.8.2
 
-ntp server vrf mgmt {{ ntp_servers }}
+{% for item in ntp_servers %}
+ntp server vrf mgmt {{ item }}
+{% endfor %}
