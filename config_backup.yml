@@ -1,7 +1,9 @@
+###swap this to showing dates so configs are not overwritten when run multiple times
+
 ---
 - hosts: all
   connection: local
-  gather_facts: no
+  gather_facts: yes
 
   tasks:
     - name: Backup running config
@@ -12,4 +14,4 @@
     - name: Save backup to file
       copy:
         content: "{{ output.stdout[0] }}"
-        dest: "~/backups/{{ inventory_hostname }}_running_config.txt"
+        dest: "~/backups/{{ inventory_hostname }}_running_config_{{ ansible_date_time.date }}.txt"
