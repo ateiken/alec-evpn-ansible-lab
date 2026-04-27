@@ -135,6 +135,6 @@
 
   - name: Validate base config is deployed correctly
     assert:
-      that: "{{ ntp_output.stdout[0].peers }} == 1"
+      that: " ntp_output.stdout[0].peers  == 1"
     tags:
       - base
