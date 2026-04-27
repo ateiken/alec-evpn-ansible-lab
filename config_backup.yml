@@ -1,12 +1,11 @@
 ###swap this to showing dates so configs are not overwritten when run multiple times
-
 ---
 - hosts: all
   connection: local
   gather_facts: yes
 
   vars:
-  backup_date: "{{ now(fmt='%Y-%m-%d') }}"
+    backup_date: "{{ now(fmt='%Y-%m-%d') }}"
 
   tasks:
     - name: Backup running config
@@ -22,4 +21,5 @@
     - name: Save backup to file
       copy:
         content: "{{ output.stdout[0] }}"
-        dest: "~/backups/{{ backup_date }}/{{ inventory_hostname }}_running_config_{{ backup_date }}.txt"
+        dest: "~/backups/{{ backup_date }}/{{ inventory_hostname }}_running_config_{{
+          backup_date }}.txt"
