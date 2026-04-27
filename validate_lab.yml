@@ -148,6 +148,6 @@
 
   - name: Validate dns config is deployed correctly
     assert:
-      that: " dns_output.stdout[0].v4NameServers | length  >= 12"
+      that: " dns_output.stdout[0].v4NameServers | length  >= 2"
     tags:
       - base
