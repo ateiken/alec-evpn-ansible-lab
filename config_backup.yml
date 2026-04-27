@@ -14,4 +14,4 @@
     - name: Save backup to file
       copy:
         content: "{{ output.stdout[0] }}"
-        dest: "~/backups/{{ inventory_hostname }}_running_config_{{ ansible_date_time.date }}.txt"
+        dest: "~/backups/{{ inventory_hostname }}_running_config_{{ now(fmt='%H-%M-%S') }}.txt"
