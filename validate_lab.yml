@@ -123,3 +123,18 @@
 #  - name: show output
 #    debug:
 #      var: output
+
+##add base_config validations here and use tag base to run on it's own
+
+  - name: Gather ntp Summary
+    eos_command: 
+      commands: 'show ntp status | json'
+    register: ntp_output
+    tags:
+      - base
+
+  - name: Validate base config is deployed correctly
+    assert:
+      that: "{{ ntp_output.stdout[0].peers }} == 1"
+    tags:
+      - base
