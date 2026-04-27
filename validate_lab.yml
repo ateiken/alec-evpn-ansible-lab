@@ -4,165 +4,164 @@
   gather_facts: no
 
   tasks:
-  - name: Gather lldp neighbors
-    eos_command: 
-      commands: 'show lldp neighbor | json'
-    register: output
-    tags:
-      - lldp
+    - name: Gather lldp neighbors
+      eos_command:
+        commands: "show lldp neighbor | json"
+      register: output
+      tags:
+        - lldp
 
-  - set_fact:
-      lldp:
-        "{{output.stdout[0].lldpNeighbors|lldp_list}}"
+    - set_fact:
+        lldp: "{{output.stdout[0].lldpNeighbors|lldp_list}}"
 
-  - name: Validate LLDP Neighbors
-    assert:
-      that: '"spine1" and "spine2" and in lldp'
-      msg: "Check L1 connectivity to Spines"
-    tags:
-      - lldp
+    - name: Validate LLDP Neighbors
+      assert:
+        that: "\"spine1\" and \"spine2\" and in lldp"
+        msg: "Check L1 connectivity to Spines"
+      tags:
+        - lldp
 
-  - name: Gather MLAG State
-    eos_command: 
-      commands: 'show mlag | json'
-    register: output
-    tags:
-      - mlag
+    - name: Gather MLAG State
+      eos_command:
+        commands: "show mlag | json"
+      register: output
+      tags:
+        - mlag
 
-  - name: Verify MLAG
-    assert:
-      that: >
-        "'active' in output.stdout[0].state"
-        "'connected' in output.stdout[0].negStatus"
-      fail_msg: "MLAG is down!"
-      success_msg: "MLAG is up!"
-    tags:
-      - mlag
+    - name: Verify MLAG
+      assert:
+        that: >
+          "'active' in output.stdout[0].state" "'connected' in
+          output.stdout[0].negStatus"
+        fail_msg: "MLAG is down!"
+        success_msg: "MLAG is up!"
+      tags:
+        - mlag
 
 - hosts: leafs, spines
   connection: local
   gather_facts: no
 
   tasks:
-  - name: Gather BGP Summary
-    eos_command: 
-      commands: 'show ip bgp summary | json'
-    register: output
-    tags:
-      - bgp
+    - name: Gather BGP Summary
+      eos_command:
+        commands: "show ip bgp summary | json"
+      register: output
+      tags:
+        - bgp
 
-  - name: Get peer count
-    set_fact:
-      peer_count: "{{ (output.stdout[0].vrfs.default.peers|length) }}"
-    tags:
-      - bgp
+    - name: Get peer count
+      set_fact:
+        peer_count: "{{ (output.stdout[0].vrfs.default.peers|length) }}"
+      tags:
+        - bgp
 
-  - name: Get peer list
-    set_fact:
-      bgp_peers: "{{ output.stdout[0].vrfs.default.peers }}"
-    tags:
-      - bgp
+    - name: Get peer list
+      set_fact:
+        bgp_peers: "{{ output.stdout[0].vrfs.default.peers }}"
+      tags:
+        - bgp
 
-  - name: Validate each leaf has 3 peers
-    assert:
-      that: '(peer_count|int) == 3'
-    when: "'leaf' in inventory_hostname"
-    tags:
-      - bgp
+    - name: Validate each leaf has 3 peers
+      assert:
+        that: "(peer_count|int) == 3"
+      when: "'leaf' in inventory_hostname"
+      tags:
+        - bgp
 
-  - name: Validate each spine has 8 peers
-    assert:
-      that: '(peer_count|int) == 8'
-    when: "'spine' in inventory_hostname"
-    tags:
-      - bgp
+    - name: Validate each spine has 8 peers
+      assert:
+        that: "(peer_count|int) == 8"
+      when: "'spine' in inventory_hostname"
+      tags:
+        - bgp
 
-  - name: Validate all BGP sessions are established
-    assert:
-      that: 'bgp_peers[item]["peerState"] == "Established"' 
-    with_items: "{{ bgp_peers }}"
-    tags:
-      - bgp
+    - name: Validate all BGP sessions are established
+      assert:
+        that: "bgp_peers[item][\"peerState\"] == \"Established\""
+      with_items: "{{ bgp_peers }}"
+      tags:
+        - bgp
 
-  - name: Gather EVPN Summary
-    eos_command: 
-      commands: 'show bgp evpn summary | json'
-    register: output
-    tags:
-      - evpn
+    - name: Gather EVPN Summary
+      eos_command:
+        commands: "show bgp evpn summary | json"
+      register: output
+      tags:
+        - evpn
 
-  - name: Get EVPN peer list
-    set_fact:
-      bgp_peers: "{{ output.stdout[0].vrfs.default.peers }}"
-    tags:
-      - evpn
+    - name: Get EVPN peer list
+      set_fact:
+        bgp_peers: "{{ output.stdout[0].vrfs.default.peers }}"
+      tags:
+        - evpn
 
-  - name: Validate each leaf has 2 EVPN peers
-    assert:
-      that: '(bgp_peers|length) == 2'
-    when: "'leaf' in inventory_hostname"
-    tags:
-      - evpn
+    - name: Validate each leaf has 2 EVPN peers
+      assert:
+        that: "(bgp_peers|length) == 2"
+      when: "'leaf' in inventory_hostname"
+      tags:
+        - evpn
 
-  - name: Validate each spine has 6 EVPN peers
-    assert:
-      that: '(bgp_peers|length) == 8'
-    when: "'spine' in inventory_hostname"
-    tags:
-      - evpn
+    - name: Validate each spine has 6 EVPN peers
+      assert:
+        that: "(bgp_peers|length) == 8"
+      when: "'spine' in inventory_hostname"
+      tags:
+        - evpn
 
-  - name: Validate all BGP EVPN sessions are established
-    assert:
-      that: 'bgp_peers[item]["peerState"] == "Established"' 
-    with_items: "{{ bgp_peers }}"
-    tags:
-      - evpn
+    - name: Validate all BGP EVPN sessions are established
+      assert:
+        that: "bgp_peers[item][\"peerState\"] == \"Established\""
+      with_items: "{{ bgp_peers }}"
+      tags:
+        - evpn
 
-      
-## Uncomment for addtional debugging
-#  - name: show output
-#    debug:
-#      var: output
+    ## Uncomment for addtional debugging
+    #  - name: show output
+    #    debug:
+    #      var: output
 
-##add base_config validations here and use tag base to run on it's own
+    ##add base_config validations here and use tag base to run on it's own
 
-  - name: Gather ntp Summary
-    eos_command: 
-      commands: 'show ntp associations | json'
-    register: ntp_output
-    tags:
-      - base
+    - name: Gather ntp Summary
+      eos_command:
+        commands: "show ntp associations | json"
+      register: ntp_output
+      tags:
+        - base
 
-  - name: Validate base config is deployed correctly
-    assert:
-      that: " ntp_output.stdout[0].peers | length  >= 1"
-    tags:
-      - base
+    - name: Validate base config is deployed correctly
+      assert:
+        that: " ntp_output.stdout[0].peers | length  >= 1"
+      tags:
+        - base
 
-  - name: Gather DNS Summary
-    eos_command: 
-      commands: 'show ip name-server | json'
-    register: dns_output
-    tags:
-      - base
+    - name: Gather DNS Summary
+      eos_command:
+        commands: "show ip name-server | json"
+      register: dns_output
+      tags:
+        - base
 
-  - name: Validate dns config is deployed correctly
-    assert:
-      that: " dns_output.stdout[0].v4NameServers | length  >= 2"
-    tags:
-      - base
+    - name: Validate dns config is deployed correctly
+      assert:
+        that: " dns_output.stdout[0].v4NameServers | length  >= 2"
+      tags:
+        - base
 
-  - name: Gather Routing Summary
-    eos_command: 
-      commands: 'show ip route vrf mgmt | json'
-    register: routing_output
-    tags:
-      - base
-  
-  - name: Validate default route is present in mgmt vrf
-    assert:
+    - name: Gather Routing Summary
+      eos_command:
+        commands: "show ip route vrf mgmt | json"
+      register: routing_output
+      tags:
+        - base
+
+    - name: Validate default route is present in mgmt vrf
+      assert:
         that:
-        - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'] is defined"
-        - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'].vias[0].nexthopAddr == '192.168.8.2'"
-    tags:
-      - base
+          - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'] is defined"
+          - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'].vias[0].nex\
+            thopAddr == '192.168.8.2'"
+      tags:
+        - base
