@@ -5,13 +5,21 @@
   connection: local
   gather_facts: yes
 
+  vars:
+  backup_date: "{{ now(fmt='%Y-%m-%d') }}"
+
   tasks:
     - name: Backup running config
       eos_command:
         commands: "show running-config"
       register: output
 
+    - name: create backup directory
+      file:
+        path: "~/backups/{{ backup_date }}"
+        state: directory
+
     - name: Save backup to file
       copy:
         content: "{{ output.stdout[0] }}"
-        dest: "~/backups/{{ inventory_hostname }}_running_config_{{ now(fmt='%Y-%m-%d') }}.txt"
+        dest: "~/backups/{{ backup_date }}/{{ inventory_hostname }}_running_config_{{ backup_date }}.txt"
