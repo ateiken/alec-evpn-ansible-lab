@@ -6,10 +6,10 @@
   tasks:
     - name: Backup running config
       eos_command:
-        commands: "show running-config | json"
+        commands: "show running-config"
       register: output
 
     - name: Save backup to file
       copy:
-        content: "{{ output.stdout[0]['running-config'] }}"
+        content: "output.stdout[0]"
         dest: "backups/{{ inventory_hostname }}_running_config.txt"
