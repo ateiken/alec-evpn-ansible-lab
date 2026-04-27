@@ -151,3 +151,18 @@
       that: " dns_output.stdout[0].v4NameServers | length  >= 2"
     tags:
       - base
+
+  - name: Gather Routing Summary
+    eos_command: 
+      commands: 'show ip route vrf mgmt | json'
+    register: routing_output
+    tags:
+      - base
+  
+  - name: Validate default route is present in mgmt vrf
+    assert:
+        that:
+        - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'] is defined"
+        - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'].nexthopAddr == '192.168.8.2'"
+    tags:
+      - base
