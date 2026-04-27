@@ -1,0 +1,15 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Backup running config
+      eos_command:
+        commands: "show running-config | json"
+      register: output
+
+    - name: Save backup to file
+      copy:
+        content: "{{ output.stdout[0]['running-config'] }}"
+        dest: "backups/{{ inventory_hostname }}_running_config.txt"
