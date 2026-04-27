@@ -138,3 +138,16 @@
       that: " ntp_output.stdout[0].peers | length  >= 1"
     tags:
       - base
+
+  - name: Gather DNS Summary
+    eos_command: 
+      commands: 'show ip name-server | json'
+    register: dns_output
+    tags:
+      - base
+
+  - name: Validate dns config is deployed correctly
+    assert:
+      that: " dns_output.stdout[0].v4NameServers | length  >= 1"
+    tags:
+      - base
