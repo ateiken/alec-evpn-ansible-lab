@@ -163,6 +163,6 @@
     assert:
         that:
         - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'] is defined"
-        - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'].vias.nexthopAddr == '192.168.8.2'"
+        - "routing_output.stdout[0].vrfs.mgmt.routes['0.0.0.0/0'].vias[0].nexthopAddr == '192.168.8.2'"
     tags:
       - base
