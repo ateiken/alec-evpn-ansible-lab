@@ -128,7 +128,7 @@
 
   - name: Gather ntp Summary
     eos_command: 
-      commands: 'show ntp status | json'
+      commands: 'show ntp assocations | json'
     register: ntp_output
     tags:
       - base
