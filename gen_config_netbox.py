@@ -1,6 +1,6 @@
 import pynetbox
 
-nb = pynetbox.api('http://192.168.8.10:8080', token='j7NLkeIibHoVz60Tfs6rHn0bp4FjVg2mkfXQBRqJ')
+nb = pynetbox.api('http://192.168.8.10:8080', token='wu4VAC2xlNwk2aAtSzF2KFODDrFVSSzaOf0mUveG')
 
 devices = nb.dcim.devices.all()
 
