@@ -13,6 +13,6 @@ interfaces = device.interfaces.all()
 
 for interface in interfaces:
     print(interface.name, interface.mac_address, interface.mtu)
-    ips = nb.ipam.ip_addresses.filter(interface_id=interface.id)
+    ips = nb.ipam.ip_addresses.filter(interface_id=intf.id)
     for ip in ips:
         print("  ", ip.address, ip.family)
