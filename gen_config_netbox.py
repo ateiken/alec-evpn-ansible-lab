@@ -9,7 +9,7 @@ for device in devices:
 
 device = nb.dcim.devices.get(name='msp01-lsw01')
 
-interfaces = device.interfaces.all()
+interfaces = nb.dcim.interfaces.filter(device_id=device.id)
 
 for interface in interfaces:
     print(interface.name)
