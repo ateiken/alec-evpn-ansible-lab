@@ -12,7 +12,7 @@ device = nb.dcim.devices.get(name='msp01-lsw01')
 interfaces = device.interfaces.all()
 
 for interface in interfaces:
-    print(interface.name, interface.mac_address, interface.mtu, interface.ipv4_addresses, interface.ipv6_addresses)
+    print(interface.name, interface.mac_address, interface.mtu)
     ips = nb.ipam.ip_addresses.filter(interface_id=interface.id)
-    # for ip in ips:
-    #     print("  ", ip.address, ip.family)
+    for ip in ips:
+        print("  ", ip.address, ip.family)
