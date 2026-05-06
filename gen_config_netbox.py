@@ -18,4 +18,5 @@ for device in devices:
     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
     for interface in interfaces:
         ips = nb.ipam.ip_addresses.filter(interface_id=interface.id)
-        print(f"  - {interface.name} - {ips[0].address if ips else 'No IP'}")
+        if ips:  # only print interfaces that have IPs
+            print(f"  {interface.name}: {ips[0].address}")
