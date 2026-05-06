@@ -52,8 +52,8 @@ for device in devices:
             elif 'ethernet' in interface.name.lower():
                 d['interfaces'].append({
                     'interface': interface.name,
-                    'ip': ip_only,
-                    'mask': mask_only
+                    'ip': ip_only, 
+                    'mask': '/' + mask_only
                 })
                 network = ipaddress.ip_interface(ip).network
                 hosts = list(network.hosts())
