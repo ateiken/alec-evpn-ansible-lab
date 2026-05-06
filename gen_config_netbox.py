@@ -46,11 +46,11 @@ for device in devices:
     if device.role.slug == 'leaf-switch':
         d['asn'] = leaf_asn
         remote_asn = spine_asn
-        evpn_neighbors = spine_vteps
+        d['evpn_neighbors'] = spine_vteps
     elif device.role.slug == 'spine-switch':
         d['asn'] = spine_asn
         remote_asn = leaf_asn
-        evpn_neighbors = leaf_vteps
+        d['evpn_neighbors'] = leaf_vteps
 
     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
     for interface in interfaces:
