@@ -9,6 +9,8 @@ nb = pynetbox.api('http://192.168.8.10:8080', token='wu4VAC2xlNwk2aAtSzF2KFODDrF
 # get ASNs from NetBox
 leaf_asn = nb.ipam.asns.get(description="LEAF_ASN").asn
 spine_asn = nb.ipam.asns.get(description="SPINE_ASN").asn
+leaf_vteps = []
+spine_vteps = []
 
 print(f"Leaf ASN: {leaf_asn}")
 print(f"Spine ASN: {spine_asn}")
@@ -22,6 +24,18 @@ devices = nb.dcim.devices.all()
 #         ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
 #         if ips:  # only print interfaces that have IPs
 #             print(f"  {interface.name}: {ips[0].address}")
+
+for device in devices:
+    interfaces = nb.dcim.interfaces.filter(device_id=device.id)
+    for interface in interfaces:
+        ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
+        if ips:  # only include interfaces that have IPs
+            ip = ips[0].address
+            if device.role.slug == 'leaf-switch' and 'lo1' in interface.name.lower():
+                leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
+            elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
+                spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
+        print(spine_vteps)
 
 for device in devices:
     d = {}
