@@ -31,9 +31,9 @@ for device in devices:
         ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
         if ips:  # only include interfaces that have IPs
             ip = ips[0].address
-            if device.role.slug == 'leaf-switch' and 'lo1' in interface.name.lower():
+            if device.role.slug == 'leaf-switch' and interface.name == 'lo1':
                 leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-            elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
+            elif device.role.slug == 'spine-switch' and interface.name == 'lo1':
                 spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
 
 for device in devices:
