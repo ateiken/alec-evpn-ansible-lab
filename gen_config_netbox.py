@@ -47,7 +47,7 @@ for device in devices:
                 d['loopback0_ip'] = ip_only
             elif interface.name == 'lo1':
                 d['loopback1_ip'] = ip_only
-            elif interface.name == 'mgmt0':
+            elif interface.name == 'mgmt':
                 d['ansible_host'] = ip_only
             elif 'ethernet' in interface.name.lower():
                 d['interfaces'].append({
