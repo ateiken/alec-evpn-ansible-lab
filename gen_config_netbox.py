@@ -35,7 +35,7 @@ for device in devices:
                 leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
             elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
                 spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-        print(spine_vteps)
+    print(spine_vteps)
 
 for device in devices:
     d = {}
