@@ -37,10 +37,6 @@ for device in devices:
                 leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
             elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
                 spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-    if device.role.slug == 'leaf-switch':
-        leaf_neighbors = [spine_vteps]
-    elif device.role.slug == 'spine-switch':
-        spine_neighbors = [leaf_vteps]
 
 for device in devices:
     d = {}
@@ -52,11 +48,11 @@ for device in devices:
     if device.role.slug == 'leaf-switch':
         d['asn'] = leaf_asn
         remote_asn = spine_asn
-        evpn_neighbors = [leaf_neighbors]
+        evpn_neighbors = [spine_vteps]
     elif device.role.slug == 'spine-switch':
         d['asn'] = spine_asn
         remote_asn = leaf_asn
-        evpn_neighbors = [spine_neighbors]
+        evpn_neighbors = [leaf_vteps]
 
     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
     for interface in interfaces:
