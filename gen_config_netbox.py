@@ -65,3 +65,8 @@ for device in devices:
                 })
     pprint(d)
     print()
+
+    filename = f"host_vars/{device.name}-test1.yaml"
+    with open(filename, 'w') as f:
+        yaml.dump(d, f, default_flow_style=False)
+    print(f"Generated {filename}")
