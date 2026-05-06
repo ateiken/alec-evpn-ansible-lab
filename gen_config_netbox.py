@@ -15,13 +15,13 @@ print(f"Spine ASN: {spine_asn}")
 
 # get all devices
 devices = nb.dcim.devices.all()
-for device in devices:
-    print(device.name, device.role.slug)
-    interfaces = nb.dcim.interfaces.filter(device_id=device.id)
-    for interface in interfaces:
-        ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
-        if ips:  # only print interfaces that have IPs
-            print(f"  {interface.name}: {ips[0].address}")
+# for device in devices:
+#     print(device.name, device.role.slug)
+#     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
+#     for interface in interfaces:
+#         ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
+#         if ips:  # only print interfaces that have IPs
+#             print(f"  {interface.name}: {ips[0].address}")
 
 for device in devices:
     d = {}
@@ -63,6 +63,5 @@ for device in devices:
                     'remote_as': remote_asn,
                     'state': 'present'
                 })
-
-pprint(d)
-print()
+    pprint(d)
+    print()
