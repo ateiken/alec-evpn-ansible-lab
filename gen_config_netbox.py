@@ -15,3 +15,5 @@ print(f"Spine ASN: {spine_asn}")
 devices = nb.dcim.devices.all()
 for device in devices:
     print(device.name, device.role.slug)
+    interfaces = nb.dcim.interfaces.filter(device_id=device.id)
+    print(interfaces)
