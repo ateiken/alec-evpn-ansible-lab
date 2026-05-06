@@ -27,7 +27,7 @@ for device in devices:
     d = {}
     d['hostname'] = device.name
     d['interfaces'] = []
-    d['bgp_neighbors'] = []
+    d['ospf_neighbors'] = []
 
     if device.role.slug == 'leaf-switch':
         d['asn'] = leaf_asn
@@ -58,9 +58,8 @@ for device in devices:
                 network = ipaddress.ip_interface(ip).network
                 hosts = list(network.hosts())
                 neighbor_ip = str(hosts[0]) if ip_only == str(hosts[1]) else str(hosts[1])
-                d['bgp_neighbors'].append({
+                d['ospf_neighbors'].append({
                     'neighbor': neighbor_ip,
-                    'remote_as': remote_asn,
                     'state': 'present'
                 })
     pprint(d)
