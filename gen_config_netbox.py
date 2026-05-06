@@ -35,14 +35,17 @@ for device in devices:
                 leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
             elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
                 spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-print(f"Leaf VTEPs: {leaf_vteps}")
-print(f"Spine VTEPs: {spine_vteps}")
-
+    if device.role.slug == 'leaf-switch':
+        evpn_neighbors = [spine_vteps]
+    elif device.role.slug == 'spine-switch':
+        evpn_neighbors = [leaf_vteps]
+        
 for device in devices:
     d = {}
     d['hostname'] = device.name
     d['interfaces'] = []
     d['ospf_neighbors'] = []
+    d['evpn_neighbors'] = []
 
     if device.role.slug == 'leaf-switch':
         d['asn'] = leaf_asn
