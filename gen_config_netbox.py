@@ -11,14 +11,12 @@ leaf_asn = nb.ipam.asns.get(description="LEAF_ASN").asn
 spine_asn = nb.ipam.asns.get(description="SPINE_ASN").asn
 leaf_vteps = []
 spine_vteps = []
-spine_neighbors = []
-leaf_neighbors = []
 
 print(f"Leaf ASN: {leaf_asn}")
 print(f"Spine ASN: {spine_asn}")
 
 # get all devices
-devices = nb.dcim.devices.all()
+devices = list(nb.dcim.devices.all())
 # for device in devices:
 #     print(device.name, device.role.slug)
 #     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
