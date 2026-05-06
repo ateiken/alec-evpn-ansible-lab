@@ -11,6 +11,8 @@ leaf_asn = nb.ipam.asns.get(description="LEAF_ASN").asn
 spine_asn = nb.ipam.asns.get(description="SPINE_ASN").asn
 leaf_vteps = []
 spine_vteps = []
+spine_neighbors = []
+leaf_neighbors = []
 
 print(f"Leaf ASN: {leaf_asn}")
 print(f"Spine ASN: {spine_asn}")
@@ -25,20 +27,20 @@ devices = nb.dcim.devices.all()
 #         if ips:  # only print interfaces that have IPs
 #             print(f"  {interface.name}: {ips[0].address}")
 
-# for device in devices:
-#     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
-#     for interface in interfaces:
-#         ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
-#         if ips:  # only include interfaces that have IPs
-#             ip = ips[0].address
-#             if device.role.slug == 'leaf-switch' and 'lo1' in interface.name.lower():
-#                 leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-#             elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
-#                 spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-#     if device.role.slug == 'leaf-switch':
-#         evpn_neighbors = [spine_vteps]
-#     elif device.role.slug == 'spine-switch':
-#         evpn_neighbors = [leaf_vteps]
+for device in devices:
+    interfaces = nb.dcim.interfaces.filter(device_id=device.id)
+    for interface in interfaces:
+        ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
+        if ips:  # only include interfaces that have IPs
+            ip = ips[0].address
+            if device.role.slug == 'leaf-switch' and 'lo1' in interface.name.lower():
+                leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
+            elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
+                spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
+    if device.role.slug == 'leaf-switch':
+        leaf_neighbors = [spine_vteps]
+    elif device.role.slug == 'spine-switch':
+        spine_neighbors = [leaf_vteps]
 
 for device in devices:
     d = {}
@@ -50,24 +52,13 @@ for device in devices:
     if device.role.slug == 'leaf-switch':
         d['asn'] = leaf_asn
         remote_asn = spine_asn
+        evpn_neighbors = [leaf_neighbors]
     elif device.role.slug == 'spine-switch':
         d['asn'] = spine_asn
         remote_asn = leaf_asn
+        evpn_neighbors = [spine_neighbors]
 
     interfaces = nb.dcim.interfaces.filter(device_id=device.id)
-    for interface in interfaces:
-        ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
-        if ips:  # only include interfaces that have IPs
-            ip = ips[0].address
-            if device.role.slug == 'leaf-switch' and 'lo1' in interface.name.lower():
-                leaf_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-            elif device.role.slug == 'spine-switch' and 'lo1' in interface.name.lower():
-                spine_vteps.append(ip.split('/')[0])  # store only the IP without subnet mask
-    if device.role.slug == 'leaf-switch':
-        evpn_neighbors = [spine_vteps]
-    elif device.role.slug == 'spine-switch':
-        evpn_neighbors = [leaf_vteps]
-
     for interface in interfaces:
         ips = list(nb.ipam.ip_addresses.filter(interface_id=interface.id))
         if ips:  # only include interfaces that have IPs
